@@ -520,3 +520,24 @@ audio::-webkit-media-controls-time-remaining-display {
     font-size: 1.1rem;
   }
 }
+.song-card {
+  display: flex;
+  flex-direction: column; /* Stack the title, like button, and audio vertically */
+}
+
+.song-info {
+  display: flex;
+  align-items: center; /* Vertically center the title and button */
+  gap: 10px; /* Space between the title and the like button */
+}
+
+.song-title {
+  margin: 0; /* Remove margin */
+  font-size: 16px; /* You can adjust font size as needed */
+}
+
+.like-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}

@@ -26,31 +26,12 @@ export default function AdminDashboard() {
         <h1>Admin Dashboard</h1>
       </div>
       
-      <div className="stats-grid">
-        <div className="stat-card">
-          <Music2 size={32} />
-          <h3>Total Songs</h3>
-          <div className="stat-value">{stats.totalSongs}</div>
-        </div>
-        
-        <div className="stat-card">
-          <Users size={32} />
-          <h3>Total Users</h3>
-          <div className="stat-value">{stats.totalUsers}</div>
-        </div>
-        
-        <div className="stat-card">
-          <Heart size={32} />
-          <h3>Total Likes</h3>
-          <div className="stat-value">{stats.totalLikes}</div>
-        </div>
-        
-        <div className="stat-card">
-          <PlayCircle size={32} />
-          <h3>Total Plays</h3>
-          <div className="stat-value">{stats.totalPlays}</div>
-        </div>
-      </div>
+      
+    <iframe
+        width="960"
+        height="720"
+        src="https://us-east-1.quicksight.aws.amazon.com/sn/embed/share/accounts/715841344892/dashboards/bc76b3e2-ebca-46cb-913d-fddd7f283490?directory_alias=Abhijith-31277">
+    </iframe>
     </div>
   );
 }

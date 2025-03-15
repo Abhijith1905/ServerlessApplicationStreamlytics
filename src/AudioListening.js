@@ -108,6 +108,7 @@ function AudioListening() {
     fetchAudioFiles();
   }, []);
 
+
   // 🎧 Handle song start time
   const handlePlay = async (songId, songName) => {
     if (!songId || !songName) {
@@ -177,6 +178,47 @@ const handlePauseOrEnd = (songId, songName) => {
     .catch((err) => console.error("❌ Error tracking song play:", err));
 };
 
+const handleLike = async (songId, songName) => {
+  if (!username) {
+    console.error("Username not found.");
+    return;
+  }
+  if (!songId || !songName) {
+    console.error("Missing songId or songName.");
+    return;
+  }
+
+  const isLiked = likedSongs[songId] || false;
+  const action = isLiked ? "unlike" : "like";
+  console.log(
+    `${action.toUpperCase()} song: ${songId} (${songName}) by user: ${username}`
+  );
+
+  const requestBody = { songId, songName, username, action };
+
+  try {
+    const response = await fetch(
+      "https://lc36i5jo8b.execute-api.us-east-1.amazonaws.com/dev/like-song",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(requestBody),
+      }
+    );
+
+    const responseData = await response.json();
+    console.log("API Response:", responseData);
+
+    if (!response.ok) {
+      console.error("Error response from API:", responseData);
+      return;
+    }
+
+    setLikedSongs((prev) => ({ ...prev, [songId]: !isLiked }));
+  } catch (error) {
+    console.error("Error processing like/unlike:", error);
+  }
+};
 
   return (
     <div className="audio-container">
@@ -200,7 +242,19 @@ const handlePauseOrEnd = (songId, songName) => {
                 </div>
               ) : (
                 <div key={audio.songId} className="song-card">
-                  <h3 className="song-title">{audio.songName}</h3>
+                 <div className="song-info">
+    <h3 className="song-title">{audio.songName}</h3>
+    <button
+      onClick={() => handleLike(audio.songId, audio.songName)}
+      className={`like-button ${likedSongs[audio.songId] ? "active" : ""}`}
+    >
+      {likedSongs[audio.songId] ? (
+        <Heart className="fill-current" />
+      ) : (
+        <HeartOff />
+      )}
+    </button>
+  </div>
                   <audio
                     controls
                     onPlay={() => handlePlay(audio.songId, audio.songName)}
