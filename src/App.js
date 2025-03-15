@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
+  Navigate,
   useNavigate,
 } from "react-router-dom";
 import { Amplify } from "aws-amplify";
@@ -10,24 +11,29 @@ import { withAuthenticator } from "@aws-amplify/ui-react";
 import "@aws-amplify/ui-react/styles.css";
 import config from "./amplifyconfiguration.json";
 import { CognitoUser } from "amazon-cognito-identity-js";
-import userPool from "./cognitoConfig"; // Your Cognito Config
+import userPool from "./cognitoConfig";
 
 import AudioListening from "./AudioListening";
 import AudioUpload from "./AudioUpload";
 import Home from "./Home";
+import UserHome from "./UserHome";
+import AdminHome from "./AdminHome";
+import AdminAudioListening from './AdminAudioListening';
+import AdminDashboard from "./AdminDashboard";
+import UserDashboard from './UserDashboard';
 
 Amplify.configure(config);
 
-function App({ signOut, user }) {
+function AppWrapper({ signOut, user }) {
   return (
     <Router>
-      <MainApp signOut={signOut} user={user} />
+      <App signOut={signOut} user={user} />
     </Router>
   );
 }
 
-function MainApp({ signOut, user }) {
-  const [group, setGroup] = useState("");
+function App({ signOut, user }) {
+  const [group, setGroup] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,31 +53,102 @@ function MainApp({ signOut, user }) {
 
         if (groups.includes("Admin")) {
           setGroup("Admin");
-          navigate("/upload-audio"); // Redirect for Admin
         } else if (groups.includes("User")) {
           setGroup("User");
-          navigate("/fetch-audio"); // Redirect for User
+        } else {
+          setGroup("None");
         }
       });
     };
 
     fetchUserGroup();
+  }, [user]);
+
+  const handleSignOut = () => {
+    signOut();
+    localStorage.clear();
+    sessionStorage.clear();
+
+     navigate("/", { replace: true }); // Navigate to home and replace the current history entry
+    // window.location.reload(); // Force a full reload to clear all state
+  };
+  
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/");
+    }
   }, [user, navigate]);
 
+  if (group === null) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <>
+    <div className="app-container">
       <div className="top-right">
-      <span style={{ color: "white" }}>Welcome, {user.username}!!</span>
-        <button className="signout-button" onClick={signOut}>Sign out</button>
+        <span style={{ color: "white" }}>Welcome, {user.username}!!</span>
+        <button className="signout-button" onClick={handleSignOut}>
+          Sign out
+        </button>
       </div>
+
       <Routes>
-        <Route path="/" element={<Home signOut={signOut} user={user} />} />
-        <Route path="/fetch-audio" element={<AudioListening />} />
-        <Route path="/upload-audio" element={<AudioUpload />} />
+        <Route
+          path="/"
+          element={
+            group === "Admin" ? (
+              <Navigate to="/admin-home" />
+            ) : group === "User" ? (
+              <Navigate to="/user-home" />
+            ) : (
+              <Home signOut={signOut} user={user} />
+            )
+          }
+        />
+
+        <Route
+          path="/user-home"
+          element={group === "User" ? <UserHome /> : <div>Access Denied</div>}
+        />
+
+        <Route
+          path="/admin-home"
+          element={group === "Admin" ? <AdminHome /> : <div>Access Denied</div>}
+        />
+        <Route
+          path="/upload-audio"
+          element={group === "Admin" ? <AudioUpload /> : <div>Access Denied</div>}
+        />
+
+        <Route
+          path="/admin-dashboard"
+          element={group === "Admin" ? <AdminDashboard /> : <div>Access Denied</div>}
+        />
+
+        {/* <Route
+          path="/fetch-audio"
+          element={<AudioListening /> }
+        /> */}
+
+        <Route
+          path="/admin-fetch-audio"
+          element={group === "Admin" ? <AdminAudioListening /> : <div>Access Denied</div>}
+        />
+         <Route
+          path="/user-fetch-audio"
+          element={group === "User" ? <AudioListening /> : <div>Access Denied</div>}
+        />
+
+        <Route
+          path="/user-dashboard"
+          element={group === "User" ? <UserDashboard /> : <div>Access Denied</div>}
+        />
+       
+        <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
-    </>
+    </div>
   );
 }
 
-export default withAuthenticator(App);
-
+export default withAuthenticator(AppWrapper);

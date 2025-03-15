@@ -8,7 +8,7 @@ function Home({ signOut, user }) {
     return (
       <div>
         <h1>Non-User</h1>
-        <button onClick={signOut}>Sign out</button>
+      
       </div>
     );
   }

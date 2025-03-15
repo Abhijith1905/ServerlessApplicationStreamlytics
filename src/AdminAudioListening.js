@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Heart, HeartOff, Music2 } from "lucide-react";
 import userPool from "./cognitoConfig";
 
-function AudioListening() {
+function AdminAudioListening() {
   const [audioFiles, setAudioFiles] = useState([]);
   const [likedSongs, setLikedSongs] = useState({});
   const [username, setUsername] = useState("");
@@ -143,7 +143,7 @@ function AudioListening() {
 
           {/* Option 1: Sign Out on Top-Right Corner */}
           <div className="user-section">
-            <span className="user-badge"></span>
+            <span className="user-badge">Welcome, {username || "Guest"}!</span>
           
           </div>
 
@@ -201,4 +201,4 @@ function AudioListening() {
   );
 }
 
-export default AudioListening;
+export default AdminAudioListening;

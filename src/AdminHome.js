@@ -1,36 +1,17 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import AdminHome from './pages/AdminHome';
-import AudioUpload from './pages/AudioUpload';
-import AudioStream from './pages/AudioStream';
-import './styles/App.css';
+import React from "react";
+import { Link } from "react-router-dom";
 
-function App() {
+function AdminHome() {
   return (
-    <Router>
-      <div className="app-container">
-        <nav className="nav-bar">
-          <div className="nav-content">
-            <Link to="/" className="nav-logo">
-              Admin Dashboard
-            </Link>
-            <div className="nav-links">
-              <Link to="/upload" className="nav-link">Upload</Link>
-              <Link to="/stream" className="nav-link">Stream</Link>
-            </div>
-          </div>
-        </nav>
-
-        <div className="main-content">
-          <Routes>
-            <Route path="/" element={<AdminHome />} />
-            <Route path="/upload" element={<AudioUpload />} />
-            <Route path="/stream" element={<AudioStream />} />
-          </Routes>
-        </div>
-      </div>
-    </Router>
+    <div>
+      <h1>Admin Home</h1>
+      <Link to="/upload-audio">Upload Audio</Link>
+      <br />
+      <Link to="/admin-fetch-audio">Stream Audio</Link>
+      <br/>
+       <Link to="/admin-dashboard">Dashboard</Link>
+    </div>
   );
 }
 
-export default App;
+export default AdminHome;

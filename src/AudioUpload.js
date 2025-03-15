@@ -3,6 +3,8 @@ import { Upload, Music2, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import userPool from "./cognitoConfig";
 
+
+
 function AudioUpload() {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -10,7 +12,7 @@ function AudioUpload() {
   const [dragActive, setDragActive] = useState(false);
   const [refreshAudio, setRefreshAudio] = useState(false);
   const [username, setUsername] = useState("");
-  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchUsername = () => {
@@ -145,12 +147,7 @@ function AudioUpload() {
             </div>
           )}
 
-          <button
-            onClick={() => navigate("/audiolistening")}
-            className="navigate-button"
-          >
-            Go to Audio Listening
-          </button>
+         
         </div>
       </div>
     </div>
