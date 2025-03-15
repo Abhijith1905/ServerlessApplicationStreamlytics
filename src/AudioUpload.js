@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Upload, Music2, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import userPool from "./cognitoConfig";
-
 
 
 function AudioUpload() {
@@ -10,9 +8,7 @@ function AudioUpload() {
   const [uploading, setUploading] = useState(false);
   const [message, setMessage] = useState("");
   const [dragActive, setDragActive] = useState(false);
-  const [refreshAudio, setRefreshAudio] = useState(false);
   const [username, setUsername] = useState("");
-
 
   useEffect(() => {
     const fetchUsername = () => {
@@ -31,11 +27,37 @@ function AudioUpload() {
     fetchUsername();
   }, []);
 
+  const handleDrag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile && droppedFile.type.startsWith('audio/')) {
+      setFile(droppedFile);
+      setMessage("");
+    } else {
+      setMessage("Please upload an audio file.");
+    }
+  };
+
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
-    if (selectedFile) {
+    if (selectedFile && selectedFile.type.startsWith('audio/')) {
       setFile(selectedFile);
       setMessage("");
+    } else {
+      setMessage("Please select an audio file.");
     }
   };
 
@@ -76,9 +98,8 @@ function AudioUpload() {
 
         const data = await response.json();
         if (response.ok) {
-          setMessage(`Upload successful! File URL: ${data.file_url}`);
+          setMessage("Upload successful!");
           setFile(null);
-          setRefreshAudio((prev) => !prev);
         } else {
           setMessage(`Upload failed: ${data.error}`);
         }
@@ -91,64 +112,71 @@ function AudioUpload() {
   };
 
   return (
-    <div>
-      <div className="upload-container">
-        <div className="upload-wrapper">
-          <h1 className="app-title">Upload Music</h1>
+    <div className="upload-container">
+      <div className="upload-wrapper">
+        <h1 className="home-title">Upload Music</h1>
 
-          <div className={`dropzone ${dragActive ? "drag-active" : ""}`}>
-            <input type="file" accept="audio/*" onChange={handleFileChange} />
-            <div>
-              <Music2 size={64} className="mx-auto mb-4" />
-              <p className="text-lg mb-2">
-                Drag and drop your audio file here, or click to browse
-              </p>
-              <p className="text-sm">Supports all audio formats</p>
-            </div>
+        <div
+          className={`dropzone ${dragActive ? "drag-active" : ""}`}
+          onDragEnter={handleDrag}
+          onDragLeave={handleDrag}
+          onDragOver={handleDrag}
+          onDrop={handleDrop}
+        >
+          <input
+            type="file"
+            accept="audio/*"
+            onChange={handleFileChange}
+            className="file-input"
+          />
+          <div className="dropzone-content">
+            <Music2 size={64} />
+            <p className="dropzone-text">
+              Drag and drop your audio file here, or click to browse
+            </p>
+            <p className="dropzone-subtext">Supports all audio formats</p>
           </div>
-
-          {file && (
-            <div className="file-preview">
-              <div className="file-info">
-                <Music2 size={20} />
-                <span>{file.name}</span>
-              </div>
-              <button onClick={() => setFile(null)} className="delete-button">
-                <X size={16} />
-              </button>
-            </div>
-          )}
-
-          <button
-            onClick={handleUpload}
-            disabled={uploading || !file}
-            className="upload-button"
-          >
-            {uploading ? (
-              <>
-                <div className="spinner"></div>
-                <span>Uploading...</span>
-              </>
-            ) : (
-              <>
-                <Upload size={20} />
-                <span>Upload</span>
-              </>
-            )}
-          </button>
-
-          {message && (
-            <div
-              className={`message ${
-                message.includes("successful") ? "success" : "error"
-              }`}
-            >
-              {message}
-            </div>
-          )}
-
-         
         </div>
+
+        {file && (
+          <div className="file-preview">
+            <div className="file-info">
+              <Music2 size={20} />
+              <span>{file.name}</span>
+            </div>
+            <button onClick={() => setFile(null)} className="delete-button">
+              <X size={16} />
+            </button>
+          </div>
+        )}
+
+        <button
+          onClick={handleUpload}
+          disabled={uploading || !file}
+          className="upload-button"
+        >
+          {uploading ? (
+            <>
+              <div className="spinner"></div>
+              <span>Uploading...</span>
+            </>
+          ) : (
+            <>
+              <Upload size={20} />
+              <span>Upload</span>
+            </>
+          )}
+        </button>
+
+        {message && (
+          <div
+            className={`message ${
+              message.includes("successful") ? "success" : "error"
+            }`}
+          >
+            {message}
+          </div>
+        )}
       </div>
     </div>
   );

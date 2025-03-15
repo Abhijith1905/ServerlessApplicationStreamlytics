@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Heart, HeartOff, Music2 } from "lucide-react";
+import { Trash2, Music2, PlayCircle } from "lucide-react";
 import userPool from "./cognitoConfig";
 
 function AdminAudioListening() {
   const [audioFiles, setAudioFiles] = useState([]);
-  const [likedSongs, setLikedSongs] = useState({});
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -27,43 +26,6 @@ function AdminAudioListening() {
   }, []);
 
   useEffect(() => {
-    if (!username) return;
-
-    const fetchLikedSongs = async () => {
-      try {
-        const response = await fetch(
-          `https://lc36i5jo8b.execute-api.us-east-1.amazonaws.com/dev/get-liked-songs?username=${username}`
-        );
-        if (!response.ok) throw new Error("Failed to fetch liked songs");
-
-        const rawData = await response.json();
-        console.log("Raw API Response:", rawData);
-
-        const data =
-          rawData.body && typeof rawData.body === "string"
-            ? JSON.parse(rawData.body)
-            : rawData.body;
-
-        if (!Array.isArray(data)) {
-          console.error("Expected an array but got:", typeof data, data);
-          return;
-        }
-
-        const likedMap = {};
-        data.forEach((item) => {
-          likedMap[item.songId] = true;
-        });
-
-        setLikedSongs(likedMap);
-      } catch (error) {
-        console.error("Error fetching liked songs:", error);
-      }
-    };
-
-    fetchLikedSongs();
-  }, [username]);
-
-  useEffect(() => {
     const fetchAudioFiles = async () => {
       setLoading(true);
       setError("");
@@ -74,8 +36,6 @@ function AdminAudioListening() {
         if (!response.ok) throw new Error("Failed to fetch audio");
 
         const data = await response.json();
-        console.log("Audio Files:", data);
-
         if (!Array.isArray(data)) {
           throw new Error("API did not return an array");
         }
@@ -92,62 +52,33 @@ function AdminAudioListening() {
     fetchAudioFiles();
   }, []);
 
-  const handleLike = async (songId, songName) => {
-    if (!username) {
-      console.error("Username not found.");
-      return;
-    }
-    if (!songId || !songName) {
-      console.error("Missing songId or songName.");
-      return;
-    }
-
-    const isLiked = likedSongs[songId] || false;
-    const action = isLiked ? "unlike" : "like";
-    console.log(
-      `${action.toUpperCase()} song: ${songId} (${songName}) by user: ${username}`
-    );
-
-    const requestBody = { songId, songName, username, action };
-
+  const handleDelete = async (songId) => {
     try {
       const response = await fetch(
-        "https://lc36i5jo8b.execute-api.us-east-1.amazonaws.com/dev/like-song",
+        `https://lc36i5jo8b.execute-api.us-east-1.amazonaws.com/dev/delete-audio`,
         {
-          method: "POST",
+          method: "DELETE",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(requestBody),
+          body: JSON.stringify({ songId }),
         }
       );
 
-      const responseData = await response.json();
-      console.log("API Response:", responseData);
-
-      if (!response.ok) {
-        console.error("Error response from API:", responseData);
-        return;
+      if (response.ok) {
+        setAudioFiles((prev) => prev.filter((audio) => audio.songId !== songId));
+      } else {
+        setError("Failed to delete audio file");
       }
-
-      setLikedSongs((prev) => ({ ...prev, [songId]: !isLiked }));
     } catch (error) {
-      console.error("Error processing like/unlike:", error);
+      console.error("Error deleting audio:", error);
+      setError("Error deleting audio file");
     }
   };
 
   return (
     <div className="audio-container">
       <div className="content-wrapper">
-        {/* Header Section */}
         <div className="header">
-          <h1 className="app-title">Music Stream</h1>
-
-          {/* Option 1: Sign Out on Top-Right Corner */}
-          <div className="user-section">
-            <span className="user-badge">Welcome, {username || "Guest"}!</span>
-          
-          </div>
-
-         
+          <h1 className="app-title">Admin Audio Management</h1>
         </div>
 
         {error && <div className="error-message">{error}</div>}
@@ -176,20 +107,20 @@ function AdminAudioListening() {
                   <div className="song-header">
                     <h3 className="song-title">{audio.songName}</h3>
                     <button
-                      onClick={() => handleLike(audio.songId, audio.songName)}
-                      className={`like-button ${
-                        likedSongs[audio.songId] ? "active" : ""
-                      }`}
+                      onClick={() => handleDelete(audio.songId)}
+                      className="delete-button"
+                      title="Delete song"
                     >
-                      {likedSongs[audio.songId] ? (
-                        <Heart className="fill-current" />
-                      ) : (
-                        <HeartOff />
-                      )}
+                      <Trash2 size={20} />
                     </button>
+                  </div>
+                  <div className="song-info">
+                    <PlayCircle size={16} />
+                    <span>Uploaded by: {audio.username}</span>
                   </div>
                   <audio controls>
                     <source src={audio.url} type={audio.contentType} />
+                    Your browser does not support the audio element.
                   </audio>
                 </div>
               )
