@@ -57,14 +57,16 @@ function AdminAudioListening() {
       const response = await fetch(
         `https://lc36i5jo8b.execute-api.us-east-1.amazonaws.com/dev/delete-audio`,
         {
-          method: "DELETE",
+          method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ songId }),
         }
       );
 
       if (response.ok) {
-        setAudioFiles((prev) => prev.filter((audio) => audio.songId !== songId));
+        setAudioFiles((prev) =>
+          prev.filter((audio) => audio.songId !== songId)
+        );
       } else {
         setError("Failed to delete audio file");
       }
@@ -114,10 +116,7 @@ function AdminAudioListening() {
                       <Trash2 size={20} />
                     </button>
                   </div>
-                  <div className="song-info">
-                    <PlayCircle size={16} />
-                    <span>Uploaded by: {audio.username}</span>
-                  </div>
+                  <div className="song-info"></div>
                   <audio controls>
                     <source src={audio.url} type={audio.contentType} />
                     Your browser does not support the audio element.
