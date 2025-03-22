@@ -1,0 +1,256 @@
+/* Auth Container Styles */
+body{
+    background-color: #161625;
+}
+.amplify-authenticator {
+  background-color: #1b1b2b;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: 2rem auto;
+}
+
+/* Auth Header & Footer */
+.auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-header h1 {
+  color: #a889ff;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.auth-header p {
+  color: #e0e0e0;
+  opacity: 0.8;
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.auth-footer p {
+  color: #e0e0e0;
+  opacity: 0.6;
+  font-size: 0.875rem;
+}
+
+/* Form Fields */
+.amplify-field {
+  margin-bottom: 1.5rem;
+}
+
+.amplify-field-group input {
+  background-color: #0d0d19;
+  border: none;
+  color: #e0e0e0;
+  padding: 0.75rem 1rem;
+  border-radius: 5px;
+  width: 100%;
+  transition: background-color 0.2s;
+}
+
+.amplify-field-group input:focus {
+  background-color: #161625;
+  outline: none;
+  box-shadow: 0 0 0 2px #a889ff;
+}
+
+.amplify-field-group input::placeholder {
+  color: rgb(224, 224, 224);
+}
+
+/* Password Field Eye Icon */
+.amplify-field[data-type="password"] .amplify-field-group {
+  position: relative;
+}
+
+.amplify-field[data-type="password"] button {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  padding: 0.75rem;
+  color: #a889ff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.amplify-field[data-type="password"] button svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Buttons */
+.amplify-button {
+  background-color: #7d5bbe;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.amplify-button:hover {
+  background-color: #5a3e8d;
+}
+
+.amplify-button[data-variation='link'] {
+  background: none;
+  color: #a889ff;
+  padding: 0.5rem;
+}
+
+.amplify-button[data-variation='link']:hover {
+  text-decoration: underline;
+  background: none;
+}
+
+/* App Container with Animated Background */
+.app-container {
+  min-height: 100vh;
+  background: linear-gradient(
+    45deg,
+    #121212,
+    #1a1a2e,
+    #121212
+  );
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  color: #e0e0e0;
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: rgba(13, 13, 25, 0.8);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.welcome-message {
+  font-size: 1.1rem;
+}
+
+.username {
+  color: #a889ff;
+  font-weight: 600;
+}
+
+.signout-button {
+  background-color: #7d5bbe;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.signout-button:hover {
+  background-color: #5a3e8d;
+}
+
+/* Loading State */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(
+    45deg,
+    #121212,
+    #1a1a2e,
+    #121212
+  );
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  color: #e0e0e0;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(168, 137, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #a889ff;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Access Denied & Not Found Pages */
+.access-denied,
+.not-found {
+  text-align: center;
+  padding: 4rem 2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.access-denied h2,
+.not-found h2 {
+  color: #a889ff;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.access-denied p,
+.not-found p {
+  color: rgba(224, 224, 224, 0.8);
+  font-size: 1.1rem;
+}
+
+/* Error Messages */
+.amplify-alert {
+  background-color: #e03e65;
+  color: white;
+  padding: 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+/* Links */
+.amplify-text {
+  color: #a889ff;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.amplify-text:hover {
+  opacity: 0.8;
+}
