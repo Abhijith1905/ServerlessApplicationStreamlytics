@@ -95,27 +95,15 @@ function AdminHome() {
       <div style={styles.content}>
         <header style={styles.header}>
           <div style={styles.logo}>
-            <Music2 size={24} color="#c4b5fd" />
-            <span>Streamlytics</span>
+            <Music2  size={24}  />
+            <span >Streamlytics</span>
           </div>
-          <nav style={styles.nav}>
-            <Link to="/admin" style={{...styles.navLink, ...styles.activeNavLink}}>
-              <Home size={20} />
-              <span>Home</span>
-            </Link>
-            <Link to="/upload-audio" style={styles.navLink}>
-              <Upload size={20} />
-              <span>Upload</span>
-            </Link>
-            <Link to="/admin-dashboard" style={styles.navLink}>
-              <BarChart2 size={20} />
-              <span>Dashboard</span>
-            </Link>
-          </nav>
+       
         </header>
 
-        <h1 style={styles.title}>Admin Control Center</h1>
-
+        <div className="header"> 
+        <h1 style={styles.title} className="app-title">Admin Control Center</h1>
+        </div>
         <div style={styles.cardGrid}>
           <Link to="/upload-audio" style={{...styles.card, ...styles.cardHover}}>
             <Upload size={32} color="#c4b5fd" />

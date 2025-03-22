@@ -12,6 +12,7 @@ import "@aws-amplify/ui-react/styles.css";
 import config from "./amplifyconfiguration.json";
 import { CognitoUser } from "amazon-cognito-identity-js";
 import userPool from "./cognitoConfig";
+import "./customAuth.css"
 
 import AudioListening from "./AudioListening";
 import AudioUpload from "./AudioUpload";
@@ -21,6 +22,7 @@ import AdminHome from "./AdminHome";
 import AdminAudioListening from './AdminAudioListening';
 import AdminDashboard from "./AdminDashboard";
 import UserDashboard from './UserDashboard';
+import RecommendedSongs from './RecommendedSongs';
 
 Amplify.configure(config);
 
@@ -85,6 +87,8 @@ function App({ signOut, user }) {
   }
 
   return (
+    <div>
+
     <div className="app-container">
       <div className="top-right">
         <span style={{ color: "white" }}>Welcome, {user.username}!!</span>
@@ -140,13 +144,19 @@ function App({ signOut, user }) {
           element={group === "User" ? <AudioListening /> : <div>Access Denied</div>}
         />
 
+       <Route
+          path="/user-recommendations"
+          element={group === "User" ? <RecommendedSongs /> : <div>Access Denied</div>}
+        />
+
         <Route
-          path="/user-dashboard"
+          path="/user-favourites"
           element={group === "User" ? <UserDashboard /> : <div>Access Denied</div>}
         />
        
         <Route path="*" element={<div>404 Not Found</div>} />
       </Routes>
+    </div>
     </div>
   );
 }

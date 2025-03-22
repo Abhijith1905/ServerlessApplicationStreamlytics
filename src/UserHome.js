@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Home, Music2, BarChart2 } from "lucide-react";
+import { Home,Heart,Sparkles , Music2, BarChart2 } from "lucide-react";
 
 function UserHome() {
   const styles = {
@@ -96,24 +96,29 @@ function UserHome() {
       <div style={styles.content}>
         <header style={styles.header}>
           <div style={styles.logo}>
-            <Music2 size={24} color="#c4b5fd" />
-            <span>Streamlytics</span>
+            <Music2  size={24} />
+            <span >Streamlytics</span>
           </div>
           <nav style={styles.nav}>
           
           </nav>
         </header>
 
-        <h1 style={styles.title}>Welcome to Your Music Hub</h1>
-
+        <div className="header"> 
+        <h1 style={styles.title} className="app-title">Welcome to Your Music Hub</h1>
+        </div> 
         <div style={styles.cardGrid}>
           <Link to="/user-fetch-audio" style={{...styles.card, ...styles.cardHover}}>
             <Music2 size={32} color="#c4b5fd" />
             <span>Stream Music</span>
           </Link>
-          <Link to="/user-dashboard" style={{...styles.card, ...styles.cardHover}}>
-            <BarChart2 size={32} color="#c4b5fd" />
+          <Link to="/user-favourites" style={{...styles.card, ...styles.cardHover}}>
+            <Heart size={32} color="#c4b5fd" />
             <span>Favorites</span>
+          </Link>
+          <Link to="/user-recommendations" style={{...styles.card, ...styles.cardHover}}>
+            <Sparkles size={32} color="#c4b5fd" />
+            <span>Recommendations</span>
           </Link>
         </div>
       </div>
