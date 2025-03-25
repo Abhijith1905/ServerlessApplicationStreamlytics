@@ -72,7 +72,7 @@ function App({ signOut, user }) {
     sessionStorage.clear();
 
      navigate("/", { replace: true }); // Navigate to home and replace the current history entry
-    // window.location.reload(); // Force a full reload to clear all state
+     window.location.reload(); // Force a full reload to clear all state
   };
   
 
